@@ -36,7 +36,13 @@ def lookup_waypoints(question):
         waypoints = np.array([[0, 0.1, 0.2, 0.3], [0, 0, 0, 0], [
             0.5, 0.5, 0.5, 0.5], [0, 0, 0, 0]])
         waypoint_times = np.array([0, 2, 4, 6])
-    return ([waypoints, waypoint_times])
+
+    if int(question) == 3:
+        waypoints = np.append(np.arange(0, 1, 0.01),
+                              np.arange(1, -0.01, -0.01))
+        waypoint_times = np.linspace(0, 10, len(waypoints))
+
+    return [waypoints, waypoint_times]
 
 
 def trajectory_planner(question, waypoints, max_iteration, waypoint_times, time_step):
@@ -585,7 +591,7 @@ def main(question):
     # (assumes robot is at first waypoint at the initial time)
     state[0] = waypoints[0, 0]
     state[1] = waypoints[1, 0]
-    state[2] = waypoints[2, 0]
+    state[2] = waypoints[2, 0]  # - params["COM_vertical_offset"]
     state[8] = waypoints[3, 0]
 
     # Create a trajectory consisting of desired state at each time step
@@ -677,5 +683,5 @@ if __name__ == '__main__':
     STRUCTURE AT A MINIMUM.
     '''
     # run the file with command "python3 main.py question_number" in the terminal
-    question = 2  # sys.argv[-1]
+    question = 3  # sys.argv[-1]
     main(question)
