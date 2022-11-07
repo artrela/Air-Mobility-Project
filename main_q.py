@@ -351,19 +351,19 @@ def dynamics(t, state, params, F_actual, M_actual, rpm_motor_dot):
     psi = state[8]
     body_w = state[9:12].T
 
-    # 2. #! maybe don't linearize
-    xdd = F_actual * (math.cos(phi)*math.cos(psi) *
-                      math.sin(theta) + math.sin(phi)*math.sin(psi))
-    ydd = F_actual * (math.cos(phi)*math.sin(theta) *
-                      math.sin(phi) - math.cos(psi)*math.sin(phi))
-    zdd = F_actual * math.cos(theta) * math.cos(phi) - m * g
+    # 2. #! maybe don't linearizes
+    xdd = (F_actual * (math.cos(phi)*math.cos(psi) *
+           math.sin(theta) + math.sin(phi)*math.sin(psi))) / m
+    ydd = (F_actual * (math.cos(phi)*math.sin(theta) *
+           math.sin(phi) - math.cos(psi)*math.sin(phi))) / m
+    zdd = (F_actual * math.cos(theta) * math.cos(phi) - m * g) / m
 
     # 3.
     M1 = np.array([[math.cos(theta), 0, -math.cos(phi)*math.sin(theta)],
                    [0, 1, math.sin(phi)],
                    [math.sin(phi), 0, math.cos(phi)*math.cos(theta)]])
 
-    inertial_w = np.matmul(body_w, M1)
+    inertial_w = np.matmul(np.linalg.inv(M1), body_w)
 
     # 4.
     I = params["inertia"]
