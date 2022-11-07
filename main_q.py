@@ -32,10 +32,10 @@ def lookup_waypoints(question):
     # TO DO:
 
     # sample waypoints for hover trajectory
-    # if int(question) == 2:
-    waypoints = np.array([[0, 0.1, 0.2, 0.3], [0, 0, 0, 0], [
-                         0.5, 0.5, 0.5, 0.5], [0, 0, 0, 0]])
-    waypoint_times = np.array([0, 2, 4, 6])
+    if int(question) == 2:
+        waypoints = np.array([[0, 0.1, 0.2, 0.3], [0, 0, 0, 0], [
+            0.5, 0.5, 0.5, 0.5], [0, 0, 0, 0]])
+        waypoint_times = np.array([0, 2, 4, 6])
     return ([waypoints, waypoint_times])
 
 
@@ -184,27 +184,27 @@ def attitude_by_flatness(desired_state, params):
 
     # 1.
     g = params["gravity"]
-    phi_des = desired_state["rot"][-1]
-    phidot_des = desired_state["omega"][-1]
+    psi_des = desired_state["rot"][-1]
+    psidot_des = desired_state["omega"][-1]
     acc_des = np.array(desired_state["acc"])
-    transform1 = np.array([[np.sin(phi_des), -np.cos(phi_des)],
-                           [np.cos(phi_des), np.sin(phi_des)]])
+    transform1 = np.array([[np.sin(psi_des), -np.cos(psi_des)],
+                           [np.cos(psi_des), np.sin(psi_des)]])
 
     # 2.
     rot = (1 / g) * np.matmul(transform1, acc_des[0:2])
-    rot = np.append(rot, phi_des)
+    rot = np.append(rot, psi_des)
 
     # 3.
-    transform2 = np.array([[np.cos(phi_des), np.sin(phi_des)],
-                           [-np.sin(phi_des), np.cos(phi_des)]])
+    transform2 = np.array([[np.cos(psi_des), np.sin(psi_des)],
+                           [-np.sin(psi_des), np.cos(psi_des)]])
     jerk = 0
 
-    M1 = np.array([[acc_des[0] * phidot_des - jerk],
-                  [acc_des[1] * phidot_des - jerk]])
+    M1 = np.array([[acc_des[0] * psidot_des - jerk],
+                  [acc_des[1] * psidot_des - jerk]])
 
     # 4.
     omega = (1 / g) * np.matmul(transform2, M1)
-    omega = np.append(omega, phidot_des)
+    omega = np.append(omega, psidot_des)
 
     return [rot, omega]  # ! Maybe convert these to lists before returning??
 
@@ -677,5 +677,5 @@ if __name__ == '__main__':
     STRUCTURE AT A MINIMUM.
     '''
     # run the file with command "python3 main.py question_number" in the terminal
-    question = 2  # sys.argv[1]
+    question = 2  # sys.argv[-1]
     main(question)
