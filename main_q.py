@@ -38,11 +38,11 @@ def lookup_waypoints(question):
         waypoint_times = np.array([0, 2, 4, 6])
 
     if int(question) == 3:
-        waypoints = np.append(np.arange(0, 1, 0.01),
-                              np.arange(1, -0.01, -0.01))
-        waypoint_times = np.linspace(0, 10, len(waypoints))
+        waypoints = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [
+            0.2, 0.4, 0.6, 0.8, 1, 0.8, 0.6, 0.4, 0.2, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+        waypoint_times = np.array([0, 1, 2, 4, 5, 6, 7, 8, 9, 10])
 
-    return [waypoints, waypoint_times]
+    return ([waypoints, waypoint_times])
 
 
 def trajectory_planner(question, waypoints, max_iteration, waypoint_times, time_step):
@@ -79,7 +79,6 @@ def trajectory_planner(question, waypoints, max_iteration, waypoint_times, time_
 
         trajectory_state[0:3, i] = waypoints[0:3, current_waypoint_number]
         trajectory_state[8, i] = waypoints[3, current_waypoint_number]
-
     return (trajectory_state)
 
 
@@ -314,11 +313,8 @@ def motor_model(F, M, current_state, params):
     # 4.
     rpm_dot = k_m * (rpm_des - rpm)
 
-    # 5.
-    rpm_new = rpm + rpm_dot * 0.005  # ! time step euler integration?
-
     # 6.
-    F = np.matmul(mixing_matrix, np.power(rpm_new, 2))
+    F = np.matmul(mixing_matrix, np.power(rpm, 2))
 
     # 7.
     F_motor = F[0]
