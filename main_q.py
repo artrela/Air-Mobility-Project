@@ -38,9 +38,10 @@ def lookup_waypoints(question):
         waypoint_times = np.array([0, 2, 4, 6])
 
     if int(question) == 3:
-        waypoints = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [
-            0.2, 0.4, 0.6, 0.8, 1, 0.8, 0.6, 0.4, 0.2, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
-        waypoint_times = np.array([0, 1, 2, 4, 5, 6, 7, 8, 9, 10])
+        z = np.append(np.arange(0, 1, 0.01), np.arange(0.99, 0, -0.01))
+        zeros = np.zeros(len(z))
+        waypoints = np.array([zeros, zeros, z, zeros])
+        waypoint_times = np.linspace(0, 10, len(z))
 
     return ([waypoints, waypoint_times])
 
