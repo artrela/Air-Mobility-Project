@@ -358,7 +358,7 @@ def dynamics(t, state, params, F_actual, M_actual, rpm_motor_dot):
     xdd = (F_actual * (math.cos(phi)*math.cos(psi) *
            math.sin(theta) + math.sin(phi)*math.sin(psi))) / m
     ydd = (F_actual * (math.cos(phi)*math.sin(theta) *
-           math.sin(phi) - math.cos(psi)*math.sin(phi))) / m
+           math.sin(psi) - math.cos(psi)*math.sin(phi))) / m
     zdd = (F_actual * math.cos(theta) * math.cos(phi) - m * g) / m
 
     # 3.
